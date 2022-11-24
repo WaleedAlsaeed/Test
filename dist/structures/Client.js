@@ -38,7 +38,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExtendedClient = void 0;
 const discord_js_1 = require("discord.js");
 const fs_1 = __importDefault(require("fs"));
-const mongoose_1 = require("mongoose");
 const index_1 = require("../index");
 class ExtendedClient extends discord_js_1.Client {
     constructor() {
@@ -68,13 +67,6 @@ class ExtendedClient extends discord_js_1.Client {
     start() {
         this.registerModules();
         this.login(process.env.TOKEN);
-        this.ConnectToDataBase();
-    }
-    ConnectToDataBase() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (process.env.DATABASE)
-                yield (0, mongoose_1.connect)(process.env.DATABASE).catch(console.error);
-        });
     }
     importFile(filePath) {
         var _a;
@@ -97,9 +89,9 @@ class ExtendedClient extends discord_js_1.Client {
     registerModules() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.loadCommands();
-            yield this.loadComponents();
+            //await this.loadComponents();
             yield this.loadEvents();
-            yield this.loadDataBaseEvents();
+            //await this.loadDataBaseEvents();
         });
     }
     loadCommands() {
@@ -125,24 +117,24 @@ class ExtendedClient extends discord_js_1.Client {
             }));
         });
     }
-    loadComponents() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const componentsFolders = fs_1.default.readdirSync("./src/components");
-            for (const folder of componentsFolders) {
-                switch (folder) {
-                    case "rolebuttons":
-                        fs_1.default.readdirSync(`./src/components/${folder}`).forEach((file) => __awaiter(this, void 0, void 0, function* () {
-                            const button = yield this.importFile(`../components/${folder}/${file.replace(".ts", "")}`);
-                            this.buttons.set(button.name, button);
-                        }));
-                        break;
-                    default:
-                        break;
-                }
-                console.log(`"${folder}" components are loded`);
-            }
-        });
-    }
+    //async loadComponents() {
+    //    const componentsFolders = fs.readdirSync("./src/components");
+    //    for (const folder of componentsFolders) {
+    //        switch (folder) {
+    //            case "rolebuttons":
+    //                fs.readdirSync(`./src/components/${folder}`).forEach(async (file) => {
+    //                    const button: RoleButton = await this.importFile(`../components/${folder}/${file.replace(".ts", "")}`);
+    //                    this.buttons.set(button.name, button)
+    //                });
+    //                break;
+    //        
+    //            default:
+    //                break;
+    //        }
+    //
+    //        console.log(`"${folder}" components are loded`);
+    //    }
+    //}
     loadEvents() {
         return __awaiter(this, void 0, void 0, function* () {
             const eventFiles = fs_1.default.readdirSync(`./src/events`);
@@ -158,24 +150,6 @@ class ExtendedClient extends discord_js_1.Client {
                     }
                 }));
                 console.log(`Event "${event.event}" is loded`);
-            }));
-        });
-    }
-    loadDataBaseEvents() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const dbeventFiles = fs_1.default.readdirSync(`./src/database`);
-            dbeventFiles.forEach((file) => __awaiter(this, void 0, void 0, function* () {
-                const event = yield this.importFile(`../database/${file.replace(".ts", "")}`);
-                if (event.event == "connected") {
-                    mongoose_1.connection.once(event.event, (...args) => {
-                        event.run(...args);
-                    });
-                }
-                else {
-                    mongoose_1.connection.on(event.event, (...args) => {
-                        event.run(...args);
-                    });
-                }
             }));
         });
     }

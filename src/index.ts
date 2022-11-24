@@ -7,4 +7,13 @@ import axios from 'axios';
 export const client = new ExtendedClient();
 export const config = new Config();
 
-client.start();
+
+
+
+import express from "express";
+const app = express();
+const port = process.env.PORT || 5000;
+
+app.get("/", (req, res) => res.send("Hi"));
+
+app.listen(port, () => client.start());
