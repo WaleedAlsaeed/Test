@@ -12,5 +12,8 @@ exports.config = new consts_1.Config();
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
-app.get("/", (req, res) => res.send("Hi"));
+app.get("/", (req, res) => {
+    res.send("Hi");
+    res.status(200).send('OK');
+});
 app.listen(port, () => exports.client.start());

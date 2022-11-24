@@ -14,6 +14,9 @@ import express from "express";
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.get("/", (req, res) => res.send("Hi"));
+app.get("/", (req, res) => {
+    res.send("Hi")
+    res.status(200).send('OK');
+});
 
 app.listen(port, () => client.start());
