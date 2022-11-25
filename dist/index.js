@@ -39,4 +39,4 @@ setInterval(() => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     exports.config.LogChannel("Unable to check updates");
-}), 900000);
+}), 1200000);

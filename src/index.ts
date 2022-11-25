@@ -36,4 +36,4 @@ setInterval(async () => {
         }
     }
     config.LogChannel("Unable to check updates");
-}, 900000)
+}, 1200000)
