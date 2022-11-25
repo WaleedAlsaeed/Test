@@ -21,19 +21,22 @@ app.get("/", (req, res) => {
 app.listen(port, () => client.start());
 
 
-
-setInterval(async () => {
-    for (let i = 0; i < 30; i++) {
-        try {
-            const { data, status } = await axios.get(
-                "https://wa-docs.onrender.com"
-            );
-            console.log(data);
-            console.log('response status is: ', status);
-            return;
-        } catch (error) {
-            console.log(error);
+function checkUpdates() {
+    setTimeout(async () => {
+        for (let i = 0; i < 5; i++) {
+            try {
+                const { data, status } = await axios.get(
+                    process.env.UPDATE || ""
+                );
+                console.log(data);
+                console.log('response status is: ', status);
+                return;
+            } catch (error) {
+                console.log(error);
+            }
         }
-    }
-    config.LogChannel("Unable to check updates");
-}, 1200000)
+        config.LogChannel("Unable to check updates");
+    }, 1200000);
+}
+
+checkUpdates();

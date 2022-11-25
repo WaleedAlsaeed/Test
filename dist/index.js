@@ -26,17 +26,20 @@ app.get("/", (req, res) => {
     res.status(200).send('OK');
 });
 app.listen(port, () => exports.client.start());
-setInterval(() => __awaiter(void 0, void 0, void 0, function* () {
-    for (let i = 0; i < 30; i++) {
-        try {
-            const { data, status } = yield axios_1.default.get("https://wa-docs.onrender.com");
-            console.log(data);
-            console.log('response status is: ', status);
-            return;
+function checkUpdates() {
+    setTimeout(() => __awaiter(this, void 0, void 0, function* () {
+        for (let i = 0; i < 5; i++) {
+            try {
+                const { data, status } = yield axios_1.default.get(process.env.UPDATE || "");
+                console.log(data);
+                console.log('response status is: ', status);
+                return;
+            }
+            catch (error) {
+                console.log(error);
+            }
         }
-        catch (error) {
-            console.log(error);
-        }
-    }
-    exports.config.LogChannel("Unable to check updates");
-}), 1200000);
+        exports.config.LogChannel("Unable to check updates");
+    }), 1200000);
+}
+checkUpdates();
